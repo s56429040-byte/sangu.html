@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For My Love ❤️</title>
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    color: white;
+    background: linear-gradient(135deg, #ff758c, #ff7eb3);
+}
+
+h1 { font-size: 2rem; margin-bottom: 20px; }
+
+.container {
+    position: relative;
+    width: 90%;
+    max-width: 360px;
+    height: 220px;
+}
+
+button {
+    padding: 15px 26px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+#yes, #magicYes, #loveYes { background: #ff2d55; color: white; }
+#yes:active, #magicYes:active, #loveYes:active { transform: scale(0.95); }
+
+.no-btn {
+    position: absolute;
+    background: #555;
+    color: white;
+}
+
+/* Messages and stages hidden initially */
+#message, #proposal, #magic, #loveStage, #surprise { display: none; font-size: 1.8rem; margin-top: 20px; }
+
+#surprise {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2.5rem;
+    color: yellow;
+    text-shadow: 2px 2px 10px #000;
+}
+
+.heart {
+    position: fixed;
+    bottom: -20px;
+    font-size: 24px;
+    animation: float 5s linear forwards;
+    color: #fff;
+}
+
+@keyframes float { 0% {transform:translateY(0);opacity:1;} 100% {transform:translateY(-100vh);opacity:0;} }
+
+@keyframes bounce {
+    0% { transform: translate(0,0); }
+    25% { transform: translate(-10px, -10px); }
+    50% { transform: translate(10px, -10px); }
+    75% { transform: translate(-10px, 10px); }
+    100% { transform: translate(10px, 10px); }
+}
+</style>
+</head>
+<body>
+
+<h1 id="mainTitle">What is 1 + 1 ? 🤔</h1>
+
+<div id="question">
+    <input type="number" id="answer" placeholder="Type your answer" style="padding:10px; font-size:1rem; border-radius:10px; border:none;">
+    <button id="checkAnswer">Submit</button>
+</div>
+
+<div id="magic">
+    <h1>Do you want to see magic? ✨</h1>
+    <div class="container">
+        <button id="magicYes">Yes 💕</button>
+        <button id="magicNo" class="no-btn" style="top:50%; left:60%;">No 😒</button>
+    </div>
+</div>
+
+<div id="surprise">BIG SURPRISE after 5 seconds, my Sanu 🎉</div>
+
+<div id="loveStage">
+    <h1>Do you love me, Sangam babe? ❤️</h1>
+    <div class="container">
+        <button id="loveYes">Yes 💕</button>
+        <button id="loveNo" class="no-btn" style="top:50%; left:60%;">No 😒</button>
+    </div>
+    <div id="message">I knew it 🥰💖<br>You’re my everything 💞</div>
+    <div id="proposal">Will you be mine forever? 💍💖</div>
+</div>
+
+<script>
+/* Step 1: 1+1 Question */
+const checkAnswer = document.getElementById("checkAnswer");
+const answerInput = document.getElementById("answer");
+const mainTitle = document.getElementById("mainTitle");
+const questionDiv = document.getElementById("question");
+const magicDiv = document.getElementById("magic");
+
+checkAnswer.addEventListener("click", () => {
+    const answer = parseInt(answerInput.value);
+    if(answer === 2){
+        questionDiv.style.display = "none";
+        mainTitle.style.display = "none"; 
+        magicDiv.style.display = "block";
+    } else {
+        alert("Oops! Try again 😅");
+        answerInput.value = "";
+    }
+});
+
+/* Step 2: Magic stage */
+const magicYes = document.getElementById("magicYes");
+const surprise = document.getElementById("surprise");
+
+magicYes.addEventListener("click", () => {
+    surprise.style.display = "block";
+    setTimeout(() => {
+        surprise.style.display = "none";
+        magicDiv.style.display = "none";
+        loveStage.style.display = "block";
+    }, 5000);
+});
+
+/* Step 3: Love Stage */
+const loveStage = document.getElementById("loveStage");
+const loveYes = document.getElementById("loveYes");
+const loveNo = document.getElementById("loveNo");
+const message = document.getElementById("message");
+const proposal = document.getElementById("proposal");
+const loveContainer = loveStage.querySelector(".container");
+
+// Function to move any No button
+function moveNo(btn) {
+    const parent = btn.parentElement;
+    const maxX = parent.clientWidth - btn.offsetWidth;
+    const maxY = parent.clientHeight - btn.offsetHeight;
+    const randomX = Math.random() * maxX;
+    const randomY = Math.random() * maxY;
+    btn.style.left = randomX + "px";
+    btn.style.top = randomY + "px";
+    btn.style.animation = "bounce 0.5s";
+    setTimeout(()=> btn.style.animation="",500);
+}
+
+// Attach to all No buttons
+const allNoButtons = document.querySelectorAll(".no-btn");
+allNoButtons.forEach(btn => {
+    btn.addEventListener("mouseover", ()=>moveNo(btn));
+    btn.addEventListener("click", ()=>moveNo(btn));
+    btn.addEventListener("touchstart", ()=>moveNo(btn));
+});
+
+/* Step 4: Love button */
+const nameToSpell = "SANGAM";
+
+loveYes.addEventListener("click", () => {
+    message.style.display = "block";
+    if (navigator.vibrate) navigator.vibrate([200,100,200]);
+    setInterval(()=> createHeart(), 300);
+    let index=0;
+    const nameInterval = setInterval(()=>{
+        if(index<nameToSpell.length){
+            createHeart(nameToSpell[index]);
+            index++;
+        } else {
+            clearInterval(nameInterval);
+            setTimeout(()=> proposal.style.display="block", 500);
+        }
+    },800);
+});
+
+/* Hearts */
+function createHeart(char="❤️"){
+    const heart = document.createElement("div");
+    heart.className="heart";
+    heart.innerHTML = char;
+    heart.style.left=Math.random()*100+"vw";
+    heart.style.fontSize=(20+Math.random()*20)+"px";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),5000);
+}
+</script>
+
+</body>
+</html>
+
